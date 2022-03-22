@@ -3,6 +3,7 @@ using Application.Features.Exams.Queries;
 using Core.Application.Requests;
 using Infrastructure.OutServices.MyContentHelper;
 using Microsoft.AspNetCore.Mvc;
+using MVCWebUI.Models.ViewModels;
 
 namespace MVCWebUI.Controllers
 {
@@ -24,6 +25,22 @@ namespace MVCWebUI.Controllers
         public async Task<IActionResult> Delete(DeleteExamCommand deleteExamCommand)
         {
             var result = await Mediator.Send(deleteExamCommand);
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateExam()
+        {
+            ExamViewModel examViewModel = new ExamViewModel();
+            return View(examViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateExam(ExamViewModel examViewModel)
+        {
+             await Mediator.Send(examViewModel.Article);
+            await Mediator.Send(examViewModel.Questions);
+            await Mediator.Send(examViewModel.Exam);
             return View();
         }
     }
